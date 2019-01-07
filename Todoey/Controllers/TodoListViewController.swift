@@ -19,12 +19,10 @@ class TodoListViewController: UITableViewController {
         
         let newItem = Item()
         newItem.title = "kym"
-        newItem.done = true
         iteamArray.append(newItem)
         
         
         let newItem2 = Item()
-        newItem.done = true
         newItem2.title = "punch Dave"
         iteamArray.append(newItem2)
         
@@ -32,21 +30,11 @@ class TodoListViewController: UITableViewController {
         newItem3.title = "dab"
         iteamArray.append(newItem3)
         
+       
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-      //  if let items = defaults.array(forKey: "TodoListArray") as? [String]{
-        //     iteamArray = items
-        //}
+       if let items = defaults.array(forKey: "TodoListArray") as? [Item]{
+            iteamArray = items
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -54,28 +42,28 @@ class TodoListViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        print("cellForRowAtIndexPath called")
+      
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoIteamCell", for: indexPath)
-        cell.textLabel?.text = iteamArray[indexPath.row].title
         
-        if iteamArray[indexPath.row].done == true {
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
-        }
+         let item = iteamArray[indexPath.row]
         
+        cell.textLabel?.text = item.title
+        
+        // ternary operator ==>
+        // value = condititon ? valueIfTrue : valueIfTrue
+        
+        cell.accessoryType = item.done ? .checkmark : .none
+        
+      
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(iteamArray[indexPath.row])
         
-        if iteamArray[indexPath.row].done == false{
-            iteamArray[indexPath.row].done = false
-            
-        }else {
-            iteamArray [indexPath.row].done = false
-        }
+        iteamArray[indexPath.row].done = !iteamArray[indexPath.row].done
+        
+     
         tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
