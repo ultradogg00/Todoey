@@ -19,32 +19,12 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
         
-        
-       
-        
-      //  let newItem = Item()
-     //  newItem.title = "kym"
-       // itemArray.append(newItem)
-        
-        
-      //  let newItem2 = Item()
-      //  newItem2.title = "punch Dave"
-       // itemArray.append(newItem2)
-        
-       //let newItem3 = Item()
-       // newItem3.title = "dab"
-       // itemArray.append(newItem3)
-        
-        
-       loadItems()
-       
-        
-     //  if let items = defaults.array(forKey: "TodoListArray") as? [Item]{
-       //     iteamArray = items
-     //   }
-    }
+       loadItems(with: request)
     
+    }
+    // mark:
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
     }
@@ -121,22 +101,42 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    func loadItems() {
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest() ) {
+       
         do{
           itemArray = try context.fetch(request)
         } catch{
             print("Error fetching data from context \(error)")
             
         }
-        
+        tableView.reloadData()
    
      
     }
-        
-        
-}
     
+    
+}
+
+// mark - Search bar methods
+
+extension TodoListViewController : UISearchBarDelegate{
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@ ", searchBar.text!)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        
+        loadItems(with: request)
+        
+
+    }
+
+    
+    
+}
     
 
 
