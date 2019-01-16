@@ -74,7 +74,7 @@
             </objects>
             <point key="canvasLocation" x="118" y="19"/>
         </scene>
-        <!--Todey-->
+        <!--Todoey-->
         <scene sceneID="pcm-EU-QX5">
             <objects>
                 <tableViewController id="ZiL-Kf-SIY" customClass="CategoryViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -97,7 +97,7 @@
                             <outlet property="delegate" destination="ZiL-Kf-SIY" id="OS2-TY-waT"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Todey" id="4Cr-2H-l3C">
+                    <navigationItem key="navigationItem" title="Todoey" id="4Cr-2H-l3C">
                         <barButtonItem key="rightBarButtonItem" title="+" id="OCY-IY-x8Q">
                             <color key="tintColor" red="0.44705882349999998" green="0.98431372549999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <connections>

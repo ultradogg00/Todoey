@@ -12,16 +12,23 @@ import CoreData
 class TodoListViewController: UITableViewController {
 
     var itemArray = [Item]()
+    
+    var selectedCategory : Category?{
+        didSet{
+            loadItems()
+        }
+    }
+    
     let context = (UIApplication.shared.delegate as!  AppDelegate).persistentContainer.viewContext
     
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Iteams.plist")
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-       loadItems(with: request)
+    
     
     }
     // mark:
@@ -76,6 +83,7 @@ class TodoListViewController: UITableViewController {
             let newItem = Item(context: self.context)
             newItem.title = textField.text!
             newItem.done = false
+            newItem.parentCategory = self.selectedCategory
             self.itemArray.append(newItem)
             
           self.saveItems()
@@ -101,8 +109,12 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate) {
        
+        let predicate = NSPredicate(format: "parentCategory.name MATCH %@", selectedCategory!.name!)
+        
+        request.predicate = predicate
+        
         do{
           itemArray = try context.fetch(request)
         } catch{
