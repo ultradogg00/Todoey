@@ -109,11 +109,20 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate) {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
        
-        let predicate = NSPredicate(format: "parentCategory.name MATCH %@", selectedCategory!.name!)
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
         
-        request.predicate = predicate
+        if let addtionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, addtionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+        
+//
+//        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, predicate!])
+//
+//        request.predicate = compoundPredicate
         
         do{
           itemArray = try context.fetch(request)
@@ -137,11 +146,11 @@ extension TodoListViewController : UISearchBarDelegate{
         
         let request : NSFetchRequest<Item> = Item.fetchRequest()
         
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@ ", searchBar.text!)
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@ ", searchBar.text!)
         
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
         
 
     }
